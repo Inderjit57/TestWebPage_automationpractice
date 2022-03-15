@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -33,21 +34,30 @@ public class AutomationTesting {
 		WebElement emailAddressInput = wd.findElement(By.id("email"));
 		WebElement orderReferenceInput = wd.findElement(By.id("id_order"));
 		WebElement messageInput = wd.findElement(By.xpath("//textarea[@name='message']"));
-		WebElement submitInput = wd.findElement(By.id("submitMessage"));
+		WebElement submitInput = wd.findElement(By.cssSelector("button[name='submitMessage']"));
+		
 
 		Select select = new Select(subjectHeadingInput);
 		select.selectByIndex(1);
+		
 		// perform action
-
 		emailAddressInput.sendKeys("abcd@gmail.com");
 		orderReferenceInput.sendKeys("123455");
 		messageInput.sendKeys("I want to order kutra pajama. But its not in the list");
 
 		submitInput.click();
+		
+		//Assertion check
+		wd.findElement(By.cssSelector("button[name='submitMessage']")).click();
+		WebElement assertionCheck = wd.findElement(By.xpath("p[class='alert-success']"));
+		String messageAppear = assertionCheck.getText();
+		Assert.assertEquals(messageAppear, "Your message has been successfully sent to our team.");
+		
+		
 	}
 
 	@AfterMethod
 	public void closeBrowser() {
-		wd.quit();
+		//wd.quit();
 	}
 }
