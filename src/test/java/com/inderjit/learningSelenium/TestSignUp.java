@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -33,7 +34,7 @@ public class TestSignUp {
 	public void signUpTest() {
 		WebElement emailInput = wd.findElement(By.cssSelector("input[id='email_create']"));
 		WebElement clickSubmit = wd.findElement(By.cssSelector("#SubmitCreate"));
-		emailInput.sendKeys("inder58@gmail.com");
+		emailInput.sendKeys("inder61@gmail.com");
 		clickSubmit.click();
 
 		// Signup Page: FINDING ELEMENTS FROM THE WEBPAGE:
@@ -92,6 +93,11 @@ public class TestSignUp {
 
 		// After Signup
 		System.out.println(wd.getTitle());
+		
+		WebElement loginMessage= wd.findElement(By.cssSelector(".center_column p[class='info-account']"));
+		String getLoginText = loginMessage.getText();
+		Assert.assertEquals(getLoginText,"Welcome to your account. Here you can manage all of your personal information and orders." , "Not a same Login Message");
+		//	
 	}
 
 	@AfterMethod
