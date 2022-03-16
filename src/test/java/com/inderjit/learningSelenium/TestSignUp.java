@@ -93,11 +93,12 @@ public class TestSignUp {
 
 		// After Signup
 		System.out.println(wd.getTitle());
-		
-		WebElement loginMessage= wd.findElement(By.cssSelector(".center_column p[class='info-account']"));
+
+		WebElement loginMessage = wd.findElement(By.cssSelector(".center_column p[class='info-account']"));
 		String getLoginText = loginMessage.getText();
-		Assert.assertEquals(getLoginText,"Welcome to your account. Here you can manage all of your personal information and orders." , "Not a same Login Message");
-		//	
+		Assert.assertEquals(getLoginText,
+				"Welcome to your account. Here you can manage all of your personal information and orders.",
+				"Not a same Login Message");
 	}
 
 	@AfterMethod
