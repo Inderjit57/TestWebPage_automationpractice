@@ -40,7 +40,7 @@ public class AutomationTesting {
 		Select select = new Select(subjectHeadingInput);
 		select.selectByIndex(1);
 		
-		// perform action
+		//perform action
 		emailAddressInput.sendKeys("abcd@gmail.com");
 		orderReferenceInput.sendKeys("123455");
 		messageInput.sendKeys("I want to order kutra pajama. But its not in the list");
@@ -48,10 +48,10 @@ public class AutomationTesting {
 		submitInput.click();
 		
 		//Assertion check
-		wd.findElement(By.cssSelector("button[name='submitMessage']")).click();
-		WebElement assertionCheck = wd.findElement(By.xpath("p[class='alert-success']"));
-		String messageAppear = assertionCheck.getText();
-		Assert.assertEquals(messageAppear, "Your message has been successfully sent to our team.");
+		//wd.findElement(By.cssSelector("button[name='submitMessage']")).click();
+		WebElement messageAppearanceCheck = wd.findElement(By.xpath("//p[@class='alert alert-success']"));
+		String messageAppear = messageAppearanceCheck.getText();
+		Assert.assertEquals(messageAppear, "Your message has been successfully sent to our team.","Message not present");
 		
 		
 	}
