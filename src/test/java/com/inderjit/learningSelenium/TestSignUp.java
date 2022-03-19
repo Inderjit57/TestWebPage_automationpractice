@@ -1,5 +1,6 @@
 package com.inderjit.learningSelenium;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -14,6 +15,7 @@ import org.testng.annotations.Test;
 
 public class TestSignUp {
 	WebDriver wd;
+	
 
 	@BeforeMethod
 	public void setupDriver() {
@@ -26,7 +28,7 @@ public class TestSignUp {
 		wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
 		wd.get("http://automationpractice.com/index.php?controller=authentication&back=my-account");
-
+		
 		wd.manage().window().maximize();
 	}
 
@@ -34,8 +36,13 @@ public class TestSignUp {
 	public void signUpTest() {
 		WebElement emailInput = wd.findElement(By.cssSelector("input[id='email_create']"));
 		WebElement clickSubmit = wd.findElement(By.cssSelector("#SubmitCreate"));
-		emailInput.sendKeys("inder61@gmail.com");
+		
+		Random random  = new Random();
+		emailInput.sendKeys("famous"+random.nextInt() + "@gmail.com");
 		clickSubmit.click();
+		
+		
+		
 
 		// Signup Page: FINDING ELEMENTS FROM THE WEBPAGE:
 
