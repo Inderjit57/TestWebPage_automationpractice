@@ -43,7 +43,7 @@ public class AutomationTesting {
 		//perform action
 		emailAddressInput.sendKeys("abcd@gmail.com");
 		orderReferenceInput.sendKeys("123455");
-		messageInput.sendKeys("I want to order kutra pajama. But its not in the list");
+		messageInput.sendKeys("I want to order kutra Candy. But its not in the list");
 
 		submitInput.click();
 		
