@@ -7,7 +7,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -15,7 +17,7 @@ import org.testng.annotations.Test;
 
 public class TestSignUp {
 	WebDriver wd;
-	
+	WebDriverWait driverWait;
 
 	@BeforeMethod
 	public void setupDriver() {
@@ -25,10 +27,12 @@ public class TestSignUp {
 		// Initialize the webDriver using the constructor of chromeDriver:
 		// ChromeDriver Extends RemoteWebDriver . RemoteWebDriver implements WebDriver.
 		wd = new ChromeDriver();
+
 		wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		// Using explicit Wait to find elements
+		driverWait = new WebDriverWait(wd, 10);
 
 		wd.get("http://automationpractice.com/index.php?controller=authentication&back=my-account");
-		
 		wd.manage().window().maximize();
 	}
 
@@ -36,13 +40,10 @@ public class TestSignUp {
 	public void signUpTest() {
 		WebElement emailInput = wd.findElement(By.cssSelector("input[id='email_create']"));
 		WebElement clickSubmit = wd.findElement(By.cssSelector("#SubmitCreate"));
-		
-		Random random  = new Random();
-		emailInput.sendKeys("famous"+random.nextInt() + "@gmail.com");
+
+		Random random = new Random();
+		emailInput.sendKeys("famous" + random.nextInt() + "@gmail.com");
 		clickSubmit.click();
-		
-		
-		
 
 		// Signup Page: FINDING ELEMENTS FROM THE WEBPAGE:
 
@@ -68,10 +69,14 @@ public class TestSignUp {
 
 		// WebElement chooseRadioElementMRs =
 		// wd.findElement(By.cssSelector(".radio-inline label input[id='id_gender2']"));
+
+		// Explicitly wait for the element to be present:
+		driverWait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.cssSelector(".radio-inline label input[id='id_gender1']")));
 		radioElementMr.click();
 		firstNameInput.sendKeys("Inderjit");
 		lastNameInput.sendKeys("Singh");
-		passwordInput.sendKeys("Inder1234!");
+		passwordInput.sendKeys("famous123");
 
 		// Select Day/Month/Year
 		Select selectDay = new Select(dayInput);
