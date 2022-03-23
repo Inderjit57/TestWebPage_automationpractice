@@ -25,6 +25,11 @@ public class AutomationPracticeItemPurchase {
 	JavascriptExecutor je;
 //	je = (JavascriptExecutor) wd;
 //	je.executeScript("arguments[0].scrollIntoView(true);",iframe);
+	
+//	 Using explicit Wait to find elements
+//	driverWait = new WebDriverWait(wd, 10);
+//	driverWait.until(ExpectedConditions
+//			.visibilityOfElementLocated(By.id(".box-info-product p input[id='quantity_wanted']")));
 
 	@BeforeMethod
 	public void setupDriver() {
@@ -82,10 +87,6 @@ public class AutomationPracticeItemPurchase {
 		wd.switchTo().frame(iframe);
 
 		// 5. Quantity added
-//		 Using explicit Wait to find elements
-//		driverWait = new WebDriverWait(wd, 10);
-//		driverWait.until(ExpectedConditions
-//				.visibilityOfElementLocated(By.id(".box-info-product p input[id='quantity_wanted']")));
 		WebElement addQuantity = wd
 				.findElement(By.cssSelector(".product_attributes.clearfix p input[id='quantity_wanted']"));
 		addQuantity.sendKeys("2");
@@ -97,15 +98,21 @@ public class AutomationPracticeItemPurchase {
 		// 7. Add to cart
 		WebElement addToCart = wd.findElement(By.cssSelector(".box-cart-bottom button[type='submit']"));
 		addToCart.click();
-
+		//switch back to default content
+		wd.switchTo().defaultContent();
+		
 		// 8. assert Message
 		WebElement cartMessage = wd.findElement(By.cssSelector("#layer_cart > div[class='clearfix']"));
+		
+		//Using JavascriptExecutor to scroll to the tab
 		je = (JavascriptExecutor) wd;
 		je.executeScript("arguments[0].scrollIntoView(true);",cartMessage);
 		
-		WebElement successfullCartMessage = wd.findElement(By.cssSelector("#layer_cart div > div h2 i"));
-		String text = successfullCartMessage.getText();
-		Assert.assertEquals(text, "Product successfully added to your shopping cart");
+		WebElement successfullCartMessage = wd.findElement(By.cssSelector(".layer_cart_product.col-xs-12.col-md-6 :nth-of-type(1) i[class='icon-ok']"));
+		boolean text = successfullCartMessage.isDisplayed();
+		Assert.assertEquals(text, false);
+		
+		
 
 	}
 
