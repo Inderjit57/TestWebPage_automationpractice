@@ -4,6 +4,7 @@ import java.awt.Desktop.Action;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -20,6 +21,11 @@ public class AutomationPracticeItemPurchase {
 	WebDriverWait driverWait;
 	Actions actions;
 
+	// Create instance of Javascript executor
+	JavascriptExecutor je;
+//	je = (JavascriptExecutor) wd;
+//	je.executeScript("arguments[0].scrollIntoView(true);",iframe);
+
 	@BeforeMethod
 	public void setupDriver() {
 		// Setting up the ChromeDriver path
@@ -29,7 +35,7 @@ public class AutomationPracticeItemPurchase {
 		// ChromeDriver Extends RemoteWebDriver . RemoteWebDriver implements WebDriver.
 		wd = new ChromeDriver();
 
-		wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
 		wd.get("http://automationpractice.com/index.php?controller=authentication&back=my-account");
 		wd.manage().window().maximize();
@@ -69,19 +75,19 @@ public class AutomationPracticeItemPurchase {
 				By.cssSelector(".product_list.grid.row li:nth-of-type(1) div div div a[class='quick-view']"));
 		mouseHoverToShortSleeve.click();
 
-		WebElement fancyBox = wd.findElement(By.cssSelector(".fancybox-overlay.fancybox-overlay-fixed"));
-		
-		wd.switchTo().frame(0)
-		actions = new Actions(wd);
-		actions.moveToElement(fancyBox).perform();
-		
+		// switch to iframe
+		WebElement iframe = wd.findElement(By.cssSelector(
+				"iframe[src='http://automationpractice.com/index.php?id_product=1&controller=product&content_only=1']"));
+
+		wd.switchTo().frame(iframe);
 
 		// 5. Quantity added
 //		 Using explicit Wait to find elements
 //		driverWait = new WebDriverWait(wd, 10);
 //		driverWait.until(ExpectedConditions
 //				.visibilityOfElementLocated(By.id(".box-info-product p input[id='quantity_wanted']")));
-		WebElement addQuantity = wd.findElement(By.cssSelector(".product_attributes.clearfix p input[id='quantity_wanted']"));
+		WebElement addQuantity = wd
+				.findElement(By.cssSelector(".product_attributes.clearfix p input[id='quantity_wanted']"));
 		addQuantity.sendKeys("2");
 
 		// 6. Select size
@@ -91,6 +97,15 @@ public class AutomationPracticeItemPurchase {
 		// 7. Add to cart
 		WebElement addToCart = wd.findElement(By.cssSelector(".box-cart-bottom button[type='submit']"));
 		addToCart.click();
+
+		// 8. assert Message
+		WebElement cartMessage = wd.findElement(By.cssSelector("#layer_cart > div[class='clearfix']"));
+		je = (JavascriptExecutor) wd;
+		je.executeScript("arguments[0].scrollIntoView(true);",cartMessage);
+		
+		WebElement successfullCartMessage = wd.findElement(By.cssSelector("#layer_cart div > div h2 i"));
+		String text = successfullCartMessage.getText();
+		Assert.assertEquals(text, "Product successfully added to your shopping cart");
 
 	}
 
