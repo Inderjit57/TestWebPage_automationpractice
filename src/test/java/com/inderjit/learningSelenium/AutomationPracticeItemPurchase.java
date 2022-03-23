@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -91,22 +92,30 @@ public class AutomationPracticeItemPurchase {
 			wd.switchTo().defaultContent();
 
 			// 8. assert Message
+			// Explicitly waiting for the element to be present
+			driverWait = new WebDriverWait(wd, 20);
+			driverWait.until(ExpectedConditions
+					.visibilityOfAllElementsLocatedBy(By.cssSelector("#layer_cart > div[class='clearfix']")));
+
 			WebElement cartMessage = wd.findElement(By.cssSelector("#layer_cart > div[class='clearfix']"));
 
-			// Using JavascriptExecutor to scroll to the tab
+			// Using JavascriptExecutor to scroll to the tab if its not on the front when
+			// page opens
 			je = (JavascriptExecutor) wd;
 			je.executeScript("arguments[0].scrollIntoView(true);", cartMessage);
 
-			WebElement successfullCartMessage = wd.findElement(
-					By.cssSelector(".layer_cart_product.col-xs-12.col-md-6 :nth-of-type(1) i[class='icon-ok']"));
-			boolean isTextDisplayed = successfullCartMessage.isDisplayed();
-			Assert.assertEquals(isTextDisplayed, false);
+			WebElement successfullCartMessage = wd
+					.findElement(By.cssSelector(".layer_cart_product.col-xs-12.col-md-6 > h2"));
+			String textDisplayed = successfullCartMessage.getText();
+			Assert.assertEquals(textDisplayed, "Product successfully added to your shopping cart");
+			System.out.println("Add to cart message: " + textDisplayed);
 
 			// 9. Assert The QTY and Product
 			WebElement productTitle = wd
-					.findElement(By.cssSelector("#layer_cart div > div  div span[id='layer_cart_product_title']"));
-			boolean isProductTitleTextDisplayed = productTitle.isDisplayed();
-			Assert.assertEquals(isProductTitleTextDisplayed, false);
+					.findElement(By.cssSelector(".layer_cart_product_info span[class='product-name']"));
+			String productTitleTextDisplayed = productTitle.getText();
+			Assert.assertEquals(productTitleTextDisplayed, "Faded Short Sleeve T-shirts");
+			System.out.println("Product Title: " + productTitleTextDisplayed);
 
 			// 10. Proceed to checkout
 			WebElement checkOutBtn = wd
@@ -165,10 +174,10 @@ public class AutomationPracticeItemPurchase {
 			exception.printStackTrace();
 		}
 	}
-	
-		@AfterMethod
-		public void tearDown() {
-			wd.quit();
-		}
+
+	@AfterMethod
+	public void tearDown() {
+//			wd.quit();
+	}
 
 }
